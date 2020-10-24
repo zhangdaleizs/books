@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 参数设置 -->
+
+<!--  <settings>-->
+<!--  <setting name="logImpl" value="STDOUT_LOGGING" />-->
+<!--&lt;!&ndash;   <setting name="lazyLoadingEnabled" value="true" /> &ndash;&gt;-->
+<!--&lt;!&ndash;   <setting name="aggressiveLazyLoading" value="false"/> &ndash;&gt;-->
+<!--  </settings>-->
+<!--    <typeAliases>-->
+<!--        <typeAlias type="org.mybatis.caches.redis.RedisCache" alias="redis"/>-->
+<!--    </typeAliases>-->
+   <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库-->
+<!--             <property name="dialect" value="mysql"/> -->
+        </plugin>
+    </plugins>
+</configuration>

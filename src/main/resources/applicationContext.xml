@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:task="http://www.springframework.org/schema/task"
+	   xsi:schemaLocation="
+	   	http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd
+		"
+		>
+	<!-- 支持DI 3.0版本之后自动开启 但在WEB环境下一定要手动配置 -->
+	<context:annotation-config />
+	<!-- 引入配置文件 读取占位符 -->
+	<context:property-placeholder location="classpath:db.properties"/>
+	<!-- 扫描那些包中的bean 注解的时候使用 -->
+	<context:component-scan base-package="service"			/>
+	<context:component-scan base-package="controller"		/>
+	<context:component-scan base-package="pojo"		/>
+	<!--TASK注解支持，spring才能识别@Scheduled注解 -->
+	<task:annotation-driven />
+	<!-- 支持AOP注解 -->
+	<!--<aop:aspectj-autoproxy />-->
+	<!-- MyBatis相关的信息 -->
+	<!-- 配置DataSource -->
+	<!-- 配置连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	<!-- 配置sessionFactory -->
+	<bean id="sessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="pojo" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<property name="mapperLocations" value="classpath*:dao/*Mapper.xml"/>
+	</bean>
+	<!-- 事务管理器 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 切入点配置 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* *.service.*Service.*(..))" id="txPoint" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPoint" />
+	</aop:config>
+	<!--通用事务管理AOP-->
+	<tx:advice transaction-manager="txManager" id="txAdvice">
+		<tx:attributes>
+			<tx:method name="get" read-only="true" />
+			<!--			<tx:method name="*" read-only="true" />-->
+		</tx:attributes>
+	</tx:advice>
+	<!--bean配置-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="dao" />
+	</bean>
+</beans>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.BooksMapper">
+  <resultMap id="BaseResultMap" type="pojo.domain.BooksDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="publisher" jdbcType="VARCHAR" property="publisher" />
+    <result column="no" jdbcType="VARCHAR" property="no" />
+    <result column="amount" jdbcType="VARCHAR" property="amount" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from `books`
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="pojo.domain.BooksDO" useGeneratedKeys="true">
+    insert into `books` (name, author, publisher,
+      no, amount)
+    values (#{name,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, #{publisher,jdbcType=VARCHAR},
+      #{no,jdbcType=VARCHAR}, #{amount,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="pojo.domain.BooksDO">
+    update `books`
+    <set >
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+
+      <if test="author != null">
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+
+      <if test="publisher != null">
+      publisher = #{publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="no != null">
+        no = #{no,jdbcType=VARCHAR},
+      </if>
+
+      <if test="amount != null">
+        amount = #{amount,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, name, author, publisher, no, amount
+    from `books`
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, name, author, publisher, no, amount
+    from `books`
+  </select>
+    <select id="listBooksByName" resultMap="BaseResultMap">
+       select id, name, author, publisher, no, amount
+    from `books`
+    WHERE `name` LIKE #{name}
+    </select>
+  <select id="listBooksByAuthor" resultMap="BaseResultMap">
+     select id, name, author, publisher, no, amount
+    from `books`
+    WHERE `author` LIKE #{author}
+  </select>
+  <select id="listBooksByPublisher" resultMap="BaseResultMap">
+     select id, name, author, publisher, no, amount
+    from `books`
+    WHERE `publisher` LIKE #{publisher}
+  </select>
+  <select id="listBooksByIsbn" resultMap="BaseResultMap">
+     select id, name, author, publisher, no, amount
+    from `books`
+    WHERE `no` LIKE #{isbn}
+  </select>
+</mapper>

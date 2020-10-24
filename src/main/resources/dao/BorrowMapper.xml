@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.BorrowMapper">
+  <resultMap id="BaseResultMap" type="pojo.domain.BorrowDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="books_id" jdbcType="BIGINT" property="booksId" />
+    <result column="status" jdbcType="BIT" property="status" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from `borrow`
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="pojo.domain.BorrowDO" useGeneratedKeys="true">
+    insert into `borrow` (user_id, books_id, status
+      )
+    values (#{userId,jdbcType=BIGINT}, #{booksId,jdbcType=BIGINT}, #{status,jdbcType=BIT}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="pojo.domain.BorrowDO">
+    update `borrow`
+    set user_id = #{userId,jdbcType=BIGINT},
+      books_id = #{booksId,jdbcType=BIGINT},
+      status = #{status,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, user_id, books_id, status
+    from `borrow`
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, user_id, books_id, status
+    from `borrow`
+  </select>
+  <select id="selectBorrowStatusByUserId"  resultMap="BaseResultMap">
+    select id, user_id, books_id, status
+    from `borrow`
+    WHERE `user_id` = #{id}
+    AND status = 0
+  </select>
+  <select id="selectBorrowStatusByBooksId"  resultMap="BaseResultMap">
+    select id, user_id, books_id, status
+    from `borrow`
+    WHERE `books_id` = #{id}
+    AND status = 0
+  </select>
+    <select id="listBooksByStatus"  resultMap="BaseResultMap">
+        select id, user_id, books_id, status
+    from `borrow`
+    WHERE status = #{status}
+    </select>
+</mapper>

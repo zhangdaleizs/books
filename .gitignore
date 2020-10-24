@@ -1,0 +1,14 @@
+# IntelliJ project files
+.idea
+*.iml
+*.log
+out
+gen
+deployer
+
+'.idea' 
+/target/
+/mmd-app.iml
+/C:/
+#OSX
+.DS_Store

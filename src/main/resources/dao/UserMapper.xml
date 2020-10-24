@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.UserMapper">
+  <resultMap id="BaseResultMap" type="pojo.domain.UserDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="birthday" jdbcType="TIMESTAMP" property="birthday" />
+    <result column="sex" jdbcType="CHAR" property="sex" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from `user`
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="pojo.domain.UserDO" useGeneratedKeys="true">
+    insert into `user` (name, id_card, birthday, 
+      sex)
+    values (#{name,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{birthday,jdbcType=TIMESTAMP}, 
+      #{sex,jdbcType=CHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="pojo.domain.UserDO">
+    update `user`
+    set name = #{name,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=TIMESTAMP},
+      sex = #{sex,jdbcType=CHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, name, id_card, birthday, sex
+    from `user`
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, name, id_card, birthday, sex
+    from `user`
+  </select>
+    <select id="listUserByName" resultMap="BaseResultMap">
+ select id, name, id_card, birthday, sex
+    from `user`
+    where `name` LIKE #{name}
+    </select>
+  <select id="selectUserByIdCard" resultMap="BaseResultMap">
+       select id, name, id_card, birthday, sex
+    from `user`
+    where id_card = #{idCard}
+  </select>
+</mapper>
