@@ -74,6 +74,7 @@ public class BorrowVO
         sb.append("书籍名称:").append(booksName).append("\n");
         sb.append("状态:").append(status.equals(0)?"未还":"已还").append("\n");
         sb.append("---------------").append("\n");
+        sb.append("---------------").append("\n");
         return sb.toString();
     }
 
